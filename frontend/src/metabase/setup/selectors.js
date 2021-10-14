@@ -14,6 +14,4 @@ export const selectedDatabaseEngineSelector = state => {
   return formValues ? formValues.engine : undefined;
 };
 
-export function skipUserStepSelector(state) {
-  return true;
-}
+export const skipUserStepSelector = state => true;
