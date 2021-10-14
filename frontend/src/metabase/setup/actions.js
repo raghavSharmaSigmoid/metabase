@@ -57,7 +57,7 @@ export const submitSetup = createThunkAction(SUBMIT_SETUP, function() {
       const response = await SetupApi.create({
         token: MetabaseSettings.get("setup-token"),
         prefs: {
-          site_name: userDetails.site_name,
+          site_name: userDetails?.site_name,
           site_locale: languageDetails.site_locale,
           allow_tracking: allowTracking.toString(),
         },

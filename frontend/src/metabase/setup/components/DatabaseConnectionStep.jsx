@@ -16,6 +16,7 @@ import Databases from "metabase/entities/databases";
 export default class DatabaseConnectionStep extends Component {
   static propTypes = {
     currentStep: PropTypes.number.isRequired,
+    currentStepNumber: PropTypes.number.isRequired,
     activeStep: PropTypes.number.isRequired,
     setActiveStep: PropTypes.func.isRequired,
 
