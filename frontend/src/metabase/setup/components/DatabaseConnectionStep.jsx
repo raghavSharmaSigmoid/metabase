@@ -15,7 +15,7 @@ import Databases from "metabase/entities/databases";
 
 export default class DatabaseConnectionStep extends Component {
   static propTypes = {
-    stepNumber: PropTypes.number.isRequired,
+    currentStep: PropTypes.number.isRequired,
     activeStep: PropTypes.number.isRequired,
     setActiveStep: PropTypes.func.isRequired,
 
@@ -66,7 +66,7 @@ export default class DatabaseConnectionStep extends Component {
       // Show the scheduling step if user has chosen to control scheduling manually
       // Add the default schedules because DatabaseSchedulingForm requires them and update the db state
       this.props.setDatabaseDetails({
-        nextStep: this.props.stepNumber + 1,
+        nextStep: this.props.currentStep + 1,
         details: {
           ...database,
           is_full_sync: true,
@@ -77,7 +77,7 @@ export default class DatabaseConnectionStep extends Component {
       // now that they are good, store them
       this.props.setDatabaseDetails({
         // skip the scheduling step
-        nextStep: this.props.stepNumber + 2,
+        nextStep: this.props.currentStep + 2,
         details: database,
       });
 
@@ -87,7 +87,7 @@ export default class DatabaseConnectionStep extends Component {
 
   skipDatabase = () => {
     this.props.setDatabaseDetails({
-      nextStep: this.props.stepNumber + 2,
+      nextStep: this.props.currentStep + 2,
       details: null,
     });
 
@@ -99,24 +99,24 @@ export default class DatabaseConnectionStep extends Component {
       activeStep,
       databaseDetails,
       setActiveStep,
-      stepNumber,
+      currentStep,
       formName,
     } = this.props;
     let stepText = t`Add your data`;
-    if (activeStep > stepNumber) {
+    if (activeStep > currentStep) {
       stepText =
         databaseDetails === null
           ? t`I'll add my own data later`
           : t`Connecting to ${databaseDetails.name}`;
     }
 
-    if (activeStep !== stepNumber) {
+    if (activeStep !== currentStep) {
       return (
         <CollapsedStep
-          stepNumber={stepNumber}
-          stepCircleText={String(stepNumber)}
+          currentStep={currentStep}
+          stepCircleText={String(currentStep)}
           stepText={stepText}
-          isCompleted={activeStep > stepNumber}
+          isCompleted={activeStep > currentStep}
           setActiveStep={setActiveStep}
         />
       );
@@ -126,7 +126,7 @@ export default class DatabaseConnectionStep extends Component {
           p={4}
           className="SetupStep bg-white rounded full relative SetupStep--active"
         >
-          <StepTitle title={stepText} circleText={String(stepNumber)} />
+          <StepTitle title={stepText} circleText={String(currentStep)} />
 
           <div className="Form-field">
             {t`You’ll need some info about your database, like the username and password. If you don’t have that right now, Metabase also comes with a sample dataset you can get started with.`}

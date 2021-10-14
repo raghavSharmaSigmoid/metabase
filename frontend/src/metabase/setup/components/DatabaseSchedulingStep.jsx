@@ -14,7 +14,7 @@ import MetabaseAnalytics from "metabase/lib/analytics";
 
 export default class DatabaseSchedulingStep extends Component {
   static propTypes = {
-    stepNumber: PropTypes.number.isRequired,
+    currentStep: PropTypes.number.isRequired,
     activeStep: PropTypes.number.isRequired,
     setActiveStep: PropTypes.func.isRequired,
 
@@ -24,7 +24,7 @@ export default class DatabaseSchedulingStep extends Component {
 
   handleSubmit = async database => {
     this.props.setDatabaseDetails({
-      nextStep: this.props.stepNumber + 1,
+      nextStep: this.props.currentStep + 1,
       details: database,
     });
 
@@ -36,7 +36,7 @@ export default class DatabaseSchedulingStep extends Component {
       activeStep,
       databaseDetails,
       setActiveStep,
-      stepNumber,
+      currentStep,
     } = this.props;
 
     const stepText = t`Control automatic scans`;
@@ -45,13 +45,13 @@ export default class DatabaseSchedulingStep extends Component {
       <Icon className="text-purple-hover cursor-pointer" name="gear" />
     );
 
-    if (activeStep !== stepNumber) {
+    if (activeStep !== currentStep) {
       return (
         <CollapsedStep
-          stepNumber={stepNumber}
+          currentStep={currentStep}
           stepCircleText={schedulingIcon}
           stepText={stepText}
-          isCompleted={activeStep > stepNumber}
+          isCompleted={activeStep > currentStep}
           setActiveStep={setActiveStep}
         />
       );

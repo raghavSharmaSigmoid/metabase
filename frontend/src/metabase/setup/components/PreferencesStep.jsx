@@ -16,7 +16,7 @@ export default class PreferencesStep extends Component {
   state = { errorMessage: null };
 
   static propTypes = {
-    stepNumber: PropTypes.number.isRequired,
+    currentStep: PropTypes.number.isRequired,
     activeStep: PropTypes.number.isRequired,
     setActiveStep: PropTypes.func.isRequired,
 
@@ -54,7 +54,7 @@ export default class PreferencesStep extends Component {
       activeStep,
       allowTracking,
       setupComplete,
-      stepNumber,
+      currentStep,
       setActiveStep,
     } = this.props;
 
@@ -65,14 +65,14 @@ export default class PreferencesStep extends Component {
         : t`We won't collect any usage events`;
     }
 
-    if (activeStep !== stepNumber || setupComplete) {
+    if (activeStep !== currentStep || setupComplete) {
       return (
         // The -1 is here because we don't display a number for the optional
         // database scheduling step. So this is the 5th possible step, but
         // only the 4th numbered step.
         <CollapsedStep
-          stepNumber={stepNumber}
-          stepCircleText={String(stepNumber - 1)}
+          currentStep={currentStep}
+          stepCircleText={String(currentStep - 1)}
           stepText={stepText}
           isCompleted={setupComplete}
           setActiveStep={setActiveStep}
@@ -84,7 +84,7 @@ export default class PreferencesStep extends Component {
           p={4}
           className="SetupStep bg-white rounded full relative SetupStep--active"
         >
-          <StepTitle title={stepText} circleText={String(stepNumber - 1)} />
+          <StepTitle title={stepText} circleText={String(currentStep - 1)} />
           <form onSubmit={this.formSubmitted.bind(this)} noValidate>
             <div className="Form-field">
               {t`In order to help us improve Metabase, we'd like to collect certain data about usage through Google Analytics.`}{" "}

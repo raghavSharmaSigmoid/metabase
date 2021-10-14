@@ -152,13 +152,13 @@ export default class Setup extends Component {
             <div className="SetupSteps full">
               <LanguageStep
                 {...this.props}
-                stepNumber={LANGUAGE_STEP_NUMBER}
+                currentStep={LANGUAGE_STEP_NUMBER}
                 defaultLanguage={this.state.defaultLanguage}
               />
-              <UserStep {...this.props} stepNumber={USER_STEP_NUMBER} />
+              <UserStep {...this.props} currentStep={USER_STEP_NUMBER} />
               <DatabaseConnectionStep
                 {...this.props}
-                stepNumber={DATABASE_CONNECTION_STEP_NUMBER}
+                currentStep={DATABASE_CONNECTION_STEP_NUMBER}
                 formName={databaseFormName}
               />
 
@@ -170,13 +170,13 @@ export default class Setup extends Component {
                   databaseDetails.details["let-user-control-scheduling"] && (
                     <DatabaseSchedulingStep
                       {...this.props}
-                      stepNumber={DATABASE_SCHEDULING_STEP_NUMBER}
+                      currentStep={DATABASE_SCHEDULING_STEP_NUMBER}
                     />
                   )}
               </div>
               <PreferencesStep
                 {...this.props}
-                stepNumber={PREFERENCES_STEP_NUMBER}
+                currentStep={PREFERENCES_STEP_NUMBER}
               />
 
               {setupComplete ? (

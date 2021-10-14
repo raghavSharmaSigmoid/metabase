@@ -6,7 +6,7 @@ import Icon from "metabase/components/Icon";
 
 export default class CollapsedStep extends Component {
   static propTypes = {
-    stepNumber: PropTypes.number.isRequired,
+    currentStep: PropTypes.number.isRequired,
     stepCircleText: PropTypes.string.isRequired,
     stepText: PropTypes.string.isRequired,
     setActiveStep: PropTypes.func.isRequired,
@@ -15,7 +15,7 @@ export default class CollapsedStep extends Component {
 
   gotoStep() {
     if (this.props.isCompleted) {
-      this.props.setActiveStep(this.props.stepNumber);
+      this.props.setActiveStep(this.props.currentStep);
     }
   }
 

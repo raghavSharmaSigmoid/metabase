@@ -14,7 +14,7 @@ import _ from "underscore";
 
 export default class UserStep extends Component {
   static propTypes = {
-    stepNumber: PropTypes.number.isRequired,
+    currentStep: PropTypes.number.isRequired,
     activeStep: PropTypes.number.isRequired,
     setActiveStep: PropTypes.func.isRequired,
 
@@ -35,7 +35,7 @@ export default class UserStep extends Component {
 
   handleSubmit = values => {
     this.props.setUserDetails({
-      nextStep: this.props.stepNumber + 1,
+      nextStep: this.props.currentStep + 1,
       details: _.omit(values, "password_confirm"),
     });
 
@@ -43,19 +43,19 @@ export default class UserStep extends Component {
   };
 
   render() {
-    const { activeStep, setActiveStep, stepNumber, userDetails } = this.props;
+    const { activeStep, setActiveStep, currentStep, userDetails } = this.props;
     const stepText =
-      activeStep <= stepNumber
+      activeStep <= currentStep
         ? t`What should we call you?`
         : t`Hi, ${userDetails.first_name}. Nice to meet you!`;
 
-    if (activeStep !== stepNumber) {
+    if (activeStep !== currentStep) {
       return (
         <CollapsedStep
-          stepNumber={stepNumber}
-          stepCircleText={String(stepNumber)}
+          currentStep={currentStep}
+          stepCircleText={String(currentStep)}
           stepText={stepText}
-          isCompleted={activeStep > stepNumber}
+          isCompleted={activeStep > currentStep}
           setActiveStep={setActiveStep}
         />
       );
@@ -65,7 +65,7 @@ export default class UserStep extends Component {
           p={4}
           className="SetupStep SetupStep--active rounded bg-white full relative"
         >
-          <StepTitle title={stepText} circleText={String(stepNumber)} />
+          <StepTitle title={stepText} circleText={String(currentStep)} />
 
           <User.Form
             className="mt1"
