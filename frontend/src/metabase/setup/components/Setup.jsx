@@ -21,17 +21,18 @@ import DatabaseConnectionStep from "./DatabaseConnectionStep";
 import PreferencesStep from "./PreferencesStep";
 import { AddDatabaseHelpCardHolder } from "./Setup.styled";
 
-const WELCOME_STEP_NUMBER = 0;
-const LANGUAGE_STEP_NUMBER = 1;
-const USER_STEP_NUMBER = 2;
-const DATABASE_CONNECTION_STEP_NUMBER = 3;
-const DATABASE_SCHEDULING_STEP_NUMBER = 4;
-const PREFERENCES_STEP_NUMBER = 5;
+const WELCOME_STEP = 0;
+const LANGUAGE_STEP = 1;
+const USER_STEP = 2;
+const DATABASE_CONNECTION_STEP = 3;
+const DATABASE_SCHEDULING_STEP = 4;
+const PREFERENCES_STEP = 5;
 
 export default class Setup extends Component {
   static propTypes = {
     activeStep: PropTypes.number.isRequired,
     setupComplete: PropTypes.bool.isRequired,
+    skipUserStep: PropTypes.bool.isRequired,
     userDetails: PropTypes.object,
     languageDetails: PropTypes.object,
     setActiveStep: PropTypes.func.isRequired,
@@ -47,7 +48,7 @@ export default class Setup extends Component {
   }
 
   completeWelcome() {
-    this.props.setActiveStep(LANGUAGE_STEP_NUMBER);
+    this.props.setActiveStep(LANGUAGE_STEP);
     MetabaseAnalytics.trackEvent("Setup", "Welcome");
   }
 
@@ -88,7 +89,7 @@ export default class Setup extends Component {
     // If we are entering the scheduling step, we need to scroll to the top of scheduling step container
     if (
       this.props.activeStep !== nextProps.activeStep &&
-      nextProps.activeStep === 3
+      nextProps.activeStep === DATABASE_CONNECTION_STEP
     ) {
       setTimeout(() => {
         if (this.databaseSchedulingStepContainer.current) {
@@ -103,6 +104,21 @@ export default class Setup extends Component {
     }
   }
 
+  getStepNumber(currentStep) {
+    const { skipUserStep } = this.props;
+
+    switch (currentStep) {
+      case WELCOME_STEP:
+      case LANGUAGE_STEP:
+      case USER_STEP:
+        return currentStep;
+      case DATABASE_CONNECTION_STEP:
+        return skipUserStep ? currentStep - 1 : currentStep;
+      case PREFERENCES_STEP:
+        return skipUserStep ? currentStep - 2 : currentStep - 1;
+    }
+  }
+
   render() {
     const {
       activeStep,
@@ -111,12 +127,13 @@ export default class Setup extends Component {
       databaseDetails,
       selectedDatabaseEngine,
       userDetails,
+      skipUserStep,
     } = this.props;
 
     const isDatabaseHelpCardVisible =
-      selectedDatabaseEngine && activeStep === DATABASE_CONNECTION_STEP_NUMBER;
+      selectedDatabaseEngine && activeStep === DATABASE_CONNECTION_STEP;
 
-    if (activeStep === WELCOME_STEP_NUMBER) {
+    if (activeStep === WELCOME_STEP) {
       return (
         <div className="relative full-height flex flex-full layout-centered">
           <div className="wrapper wrapper--trim text-centered">
@@ -152,14 +169,23 @@ export default class Setup extends Component {
             <div className="SetupSteps full">
               <LanguageStep
                 {...this.props}
-                currentStep={LANGUAGE_STEP_NUMBER}
+                currentStep={LANGUAGE_STEP}
+                currentStepNumber={this.getStepNumber(LANGUAGE_STEP)}
+                skipUserStep={skipUserStep}
                 defaultLanguage={this.state.defaultLanguage}
               />
-              <UserStep {...this.props} currentStep={USER_STEP_NUMBER} />
+              {!skipUserStep && (
+                <UserStep
+                  {...this.props}
+                  currentStep={USER_STEP}
+                  currentStepNumber={this.getStepNumber(USER_STEP)}
+                />
+              )}
               <DatabaseConnectionStep
                 {...this.props}
-                currentStep={DATABASE_CONNECTION_STEP_NUMBER}
                 formName={databaseFormName}
+                currentStep={DATABASE_CONNECTION_STEP}
+                currentStepNumber={this.getStepNumber(DATABASE_CONNECTION_STEP)}
               />
 
               {/* Have the ref for scrolling in UNSAFE_componentWillReceiveProps */}
@@ -170,13 +196,14 @@ export default class Setup extends Component {
                   databaseDetails.details["let-user-control-scheduling"] && (
                     <DatabaseSchedulingStep
                       {...this.props}
-                      currentStep={DATABASE_SCHEDULING_STEP_NUMBER}
+                      currentStep={DATABASE_SCHEDULING_STEP}
                     />
                   )}
               </div>
               <PreferencesStep
                 {...this.props}
-                currentStep={PREFERENCES_STEP_NUMBER}
+                currentStep={PREFERENCES_STEP}
+                currentStepNumber={this.getStepNumber(PREFERENCES_STEP)}
               />
 
               {setupComplete ? (

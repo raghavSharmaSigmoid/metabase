@@ -100,8 +100,10 @@ export default class DatabaseConnectionStep extends Component {
       databaseDetails,
       setActiveStep,
       currentStep,
+      currentStepNumber,
       formName,
     } = this.props;
+
     let stepText = t`Add your data`;
     if (activeStep > currentStep) {
       stepText =
@@ -114,7 +116,7 @@ export default class DatabaseConnectionStep extends Component {
       return (
         <CollapsedStep
           currentStep={currentStep}
-          stepCircleText={String(currentStep)}
+          stepCircleText={String(currentStepNumber)}
           stepText={stepText}
           isCompleted={activeStep > currentStep}
           setActiveStep={setActiveStep}
@@ -126,7 +128,7 @@ export default class DatabaseConnectionStep extends Component {
           p={4}
           className="SetupStep bg-white rounded full relative SetupStep--active"
         >
-          <StepTitle title={stepText} circleText={String(currentStep)} />
+          <StepTitle title={stepText} circleText={String(currentStepNumber)} />
 
           <div className="Form-field">
             {t`You’ll need some info about your database, like the username and password. If you don’t have that right now, Metabase also comes with a sample dataset you can get started with.`}

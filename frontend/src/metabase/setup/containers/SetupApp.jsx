@@ -5,7 +5,17 @@ import fitViewport from "metabase/hoc/FitViewPort";
 
 import Setup from "../components/Setup";
 
-import { DATABASE_FORM_NAME, setupSelectors } from "../selectors";
+import {
+  activeStepSelector,
+  allowTrackingSelector,
+  DATABASE_FORM_NAME,
+  databaseDetailsSelector,
+  selectedDatabaseEngineSelector,
+  setupCompleteSelector,
+  setupErrorSelector,
+  skipUserStepSelector,
+  userDetailsSelector,
+} from "../selectors";
 import {
   setUserDetails,
   validatePassword,
@@ -17,7 +27,16 @@ import {
   submitSetup,
 } from "../actions";
 
-const mapStateToProps = setupSelectors;
+const mapStateToProps = state => ({
+  activeStep: activeStepSelector(state),
+  userDetails: userDetailsSelector(state),
+  databaseDetails: databaseDetailsSelector(state),
+  allowTracking: allowTrackingSelector(state),
+  setupError: setupErrorSelector(state),
+  setupComplete: setupCompleteSelector(state),
+  selectedDatabaseEngine: selectedDatabaseEngineSelector(state),
+  skipUserStep: skipUserStepSelector(state),
+});
 
 const mapDispatchToProps = {
   setLanguageDetails,

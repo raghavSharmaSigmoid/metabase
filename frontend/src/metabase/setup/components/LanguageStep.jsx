@@ -28,14 +28,17 @@ export default class LanguageStep extends React.Component {
     const {
       activeStep,
       currentStep,
+      currentStepNumber,
+      skipUserStep,
       setActiveStep,
       setLanguageDetails,
     } = this.props;
+
     if (activeStep !== currentStep) {
       return (
         <CollapsedStep
           currentStep={currentStep}
-          stepCircleText={String(currentStep)}
+          stepCircleText={String(currentStepNumber)}
           stepText={t`Your language is set to ${this.state.selectedLanguage.name}`}
           isCompleted={activeStep > currentStep}
           setActiveStep={setActiveStep}
@@ -49,7 +52,7 @@ export default class LanguageStep extends React.Component {
         >
           <StepTitle
             title={t`What's your preferred language?`}
-            circleText={String(currentStep)}
+            circleText={String(currentStepNumber)}
           />
           <p className="text-default">
             {t`This language will be used throughout Metabase and will be the default for new users.`}
@@ -91,7 +94,7 @@ export default class LanguageStep extends React.Component {
             primary
             onClick={() => {
               return setLanguageDetails({
-                nextStep: currentStep + 1,
+                nextStep: currentStep + (skipUserStep ? 2 : 1),
                 details: { site_locale: this.state.selectedLanguage.code },
               });
             }}
