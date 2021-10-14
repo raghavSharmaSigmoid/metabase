@@ -9,10 +9,10 @@ export const allowTrackingSelector = state => state.setup.allowTracking;
 export const setupErrorSelector = state => state.setup.setupError;
 export const setupCompleteSelector = state => state.setup.setupComplete;
 
-export function selectedDatabaseEngineSelector(state) {
+export const selectedDatabaseEngineSelector = state => {
   const formValues = getValues(state.form[DATABASE_FORM_NAME]);
   return formValues ? formValues.engine : undefined;
-}
+};
 
 export function skipUserStepSelector(state) {
   return true;
